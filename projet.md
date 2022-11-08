@@ -26,7 +26,7 @@ Ce script nécessite la présence d'arguments pour fonctionner :
 - L'adresse IP du serveur (`--server <server>`)
 - L'intention du client (`--create` ou `--join <lobby>`)
 
-Le script va ensuite se connecter au serveur, puis rediriger le flux d'entrée et de sortie vers le serveur. Toutes les entrées de d'utilisateur seront donc envoyées au serveur. Cependant, seulement les informations commançant par les tags `@everyone` ou `@<user_id>` (où `<user_id>` représente l'identifiant de l'utilisateur choisi aléatoirement par le client avant de se connecter) seront affichées à l'utilisateur.
+Le script va ensuite se connecter au serveur, puis rediriger le flux d'entrée et de sortie vers le serveur. Toutes les entrées de d'utilisateur seront donc envoyées au serveur. Cependant, seules les informations commançant par les tags `@everyone` ou `@<user_id>` (où `<user_id>` représente l'identifiant de l'utilisateur choisi aléatoirement par le client avant de se connecter) seront affichées à l'utilisateur.
 
 ## Notre serveur
 
