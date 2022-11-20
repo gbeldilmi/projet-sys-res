@@ -25,8 +25,10 @@ LD_FLAGS            :=
 #------------------------------------------------------------------------------#
 # Commands                                                                     #
 #------------------------------------------------------------------------------#
-.PHONY : all, clean
+.PHONY : all, run, clean
 all : $(BUILD_DIR)/$(BINARY_FILE)
+run : all
+	./$(BUILD_DIR)/$(BINARY_FILE)
 clean :
 	rm -rv $(BUILD_DIR)
 
