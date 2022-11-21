@@ -6,12 +6,15 @@ game_dir="$run_dir/games"
 pipe_dir="$run_dir/pipes"
 
 
-program="./bin/game"
-if [ ! -f "$program" ]; then
+init () {
+  program="./game/bin/game"
+  if [ ! -f "$program" ]; then
     echo "Error: $program not found"
     exit 1
-fi
-mkdir -p $run_dir $game_dir $pipe_dir
+  fi
+  mkdir -p $run_dir $game_dir $pipe_dir
+}
+init
 
 
 title () {
@@ -34,7 +37,8 @@ select_action () {
   echo "0. Quit"
   while true
   do
-    read -p "Choose an action: " action
+    echo "Choose an action: "
+    read action
     case $action in
       1|2|0)
         return $action
@@ -48,8 +52,53 @@ select_action () {
 
 
 action_create () {
-  read -p "Enter a name for your game: " game_name
-  
+  while true
+  do
+    echo "Enter a name for your game: "
+    read game_name
+    if [ -z "$game_name" ]
+    then
+      echo "Game name cannot be empty. Please try again."
+    elif [ -e "$game_dir/$game_name" ]
+    then
+      echo "Game name already exists. Please try again."
+    else
+      break
+    fi
+  done
+
+  while true
+  do 
+    echo "Enter the number of players: "
+    read num_players
+    if [ $num_players -lt 2 ]
+    then
+      echo "Number of players must be at least 2. Please try again."
+    else
+      break
+    fi
+  done
+
+  while true
+  do
+    echo "Enter the number of bots: "
+    read num_bots
+    if [ $num_bots -lt 0 ]
+    then
+      echo "Number of bots must be at least 0. Please try again."
+    elif [ $num_bots -eq $num_players ]
+    then
+      echo "It must be at least one human player. Please try again."
+    elif [ $num_bots -gt $num_players ]
+    then
+      echo "Number of bots cannot be greater than number of players. Please try again."
+    else
+      break
+    fi
+  done
+
+
+  echo "Creating game $game_name with $($num_players - $num_bots) human players and $num_bots bots..."
 }
 
 
@@ -59,18 +108,19 @@ action_join () {
 }
 
 
-select_action
-action=$?
-echo " "
-case $action in
-  1)
-    action_create
-    ;;
-  2)
-    action_join
-    ;;
-esac
-
-
-echo " "
-echo "Goodbye!"
+main () {
+  select_action
+  action=$?
+  echo " "
+  case $action in
+    1)
+      action_create
+      ;;
+    2)
+      action_join
+      ;;
+  esac
+  echo " "
+  echo "Goodbye!"
+}
+main
