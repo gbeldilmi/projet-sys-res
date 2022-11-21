@@ -3,7 +3,7 @@
 
 program="./run/lobby.sh"
 start_port=8777
-number_port=20
+number_port=3
 
 running=true
 
@@ -25,7 +25,7 @@ run () {
 }
 
 
-for p in $(seq $start_port 1 $(($start_port + $number_port)))
+for p in $(seq $start_port 1 $(($start_port + $number_port - 1)))
 do
   run $p &
 done

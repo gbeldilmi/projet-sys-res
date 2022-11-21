@@ -9,7 +9,7 @@ fi
 
 server="$1"
 begin_port=8777
-number_port=20
+number_port=3
 
 running=true
 
@@ -26,7 +26,7 @@ do
   else
     echo "Last status returned : $?"
     p=$(($p + 1))
-    if [[ $p -gt $(($begin_port + $number_port)) ]]
+    if [[ $p -gt $(($begin_port + $number_port - 1)) ]]
     then
       running=false
     else
