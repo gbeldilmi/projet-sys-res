@@ -1,8 +1,17 @@
 #! /usr/bin/env bash
 
 
+run_dir="/tmp/lobby"
+game_dir="$run_dir/games"
+pipe_dir="$run_dir/pipes"
+
+
 program="./bin/game"
-pipe_dir="io"
+if [ ! -f "$program" ]; then
+    echo "Error: $program not found"
+    exit 1
+fi
+mkdir -p $run_dir $game_dir $pipe_dir
 
 
 title () {
@@ -26,25 +35,21 @@ select_action () {
   while true
   do
     read -p "Choose an action: " action
-    if [[ $action == "1" ]]
-    then
-      return 1
-    elif [[ $action == "2" ]]
-    then
-      return 2
-    elif [[ $action == "0" ]]
-    then
-      return 0
-    else
-      echo "Invalid action"
-    fi
+    case $action in
+      1|2|0)
+        return $action
+        ;;
+      *)
+        echo "Invalid action. Please try again."
+        ;;
+    esac
   done
 }
 
 
 action_create () {
-  # TODO
-  echo "Create a new game"
+  read -p "Enter a name for your game: " game_name
+  
 }
 
 
@@ -56,13 +61,16 @@ action_join () {
 
 select_action
 action=$?
-if [ $action -eq 1 ]
-then
-  action_create
-elif [ $action -eq 2 ]
-then
-  action_join
-fi
+echo " "
+case $action in
+  1)
+    action_create
+    ;;
+  2)
+    action_join
+    ;;
+esac
+
 
 echo " "
 echo "Goodbye!"
