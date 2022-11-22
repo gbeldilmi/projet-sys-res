@@ -3,7 +3,6 @@
 
 run_dir="/tmp/lobby"
 game_dir="$run_dir/games"
-pipe_dir="$run_dir/pipes"
 
 
 init () {
@@ -51,6 +50,21 @@ select_action () {
 }
 
 
+int () {
+  printf '%d' $(expr ${1:-} : '[^0-9]*\([0-9]*\)' 2>/dev/null)||:;
+}
+
+
+link () {
+  game_id=$1
+  
+  #############################################################################################################################################
+  #############################################################################################################################################
+  #############################################################################################################################################
+  #############################################################################################################################################
+}
+
+
 action_create () {
   while true
   do
@@ -69,42 +83,62 @@ action_create () {
 
   while true
   do 
-    echo "Enter the number of players: "
-    read num_players
-    if [ $num_players -lt 2 ]
-    then
-      echo "Number of players must be at least 2. Please try again."
-    else
-      break
-    fi
-  done
-
-  while true
-  do
-    echo "Enter the number of bots: "
+    echo "Enter the number of human players: "
+    read num_humans
+    num_humans=$(int $num_humans)
+    echo "Enter the number of bot players: "
     read num_bots
-    if [ $num_bots -lt 0 ]
+    num_bots=$(int $num_bots)
+    if [ $num_humans -lt 1 ]
+    then
+      echo "Number of human players must be at least 1. Please try again."
+    elif [ $num_bots -lt 0 ]
     then
       echo "Number of bots must be at least 0. Please try again."
-    elif [ $num_bots -eq $num_players ]
+    elif [ $($num_bots + $num_players) -gt 10 ]
     then
-      echo "It must be at least one human player. Please try again."
-    elif [ $num_bots -gt $num_players ]
-    then
-      echo "Number of bots cannot be greater than number of players. Please try again."
+      echo "Total number of players must be at most 10. Please try again."
     else
       break
     fi
   done
 
+  echo "Creating game $game_name with $num_humans human players and $num_bots bot players..."
 
-  echo "Creating game $game_name with $($num_players - $num_bots) human players and $num_bots bots..."
+  mkdir "$game_dir/$game_name"
+
+  for i in $(seq 0 $($num_humans - 1))
+  do
+    mkfifo "$game_dir/$game_name/$game_name-$i.in"
+    mkfifo "$game_dir/$game_name/$game_name-$i.out"
+    mkdir "$game_dir/$game_name/$game_name-$i.open"
+  done
+
+  link $game_name
 }
 
 
 action_join () {
-  # TODO
-  echo "Join an existing game"
+  echo "Available games: "
+  ls $game_dir
+  while true
+  do
+    echo "Enter the name of the game you want to join: "
+    read game_name
+    if [ -z "$game_name" ]
+    then
+      echo "Game name cannot be empty. Please try again."
+    elif [ ! -e "$game_dir/$game_name" ]
+    then
+      echo "Game name does not exist. Please try again."
+    else
+      break
+    fi
+  done
+
+  echo "Joining game $game_name..."
+
+  link $game_name
 }
 
 
