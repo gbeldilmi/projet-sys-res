@@ -5,18 +5,15 @@ program="./run/lobby.sh"
 start_port=8777
 number_port=3
 
-running=true
 
-
-close () { # Choose your way to die
-  # running=false
+close () {
   killall bash
 }
 trap close SIGINT
 
 
 run () {
-  while $running
+  while true
   do
     echo "Opening connection @$1"
     netcat -l -p $1 -c -e $program
