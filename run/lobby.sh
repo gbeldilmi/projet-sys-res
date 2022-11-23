@@ -3,11 +3,12 @@
 
 run_dir="/tmp/lobby"
 game_dir="$run_dir/games"
+program="./game/bin/game"
 
 
 init () {
-  program="./game/bin/game"
-  if [ ! -f "$program" ]; then
+  if [ ! -f "$program" ]
+  then
     echo "Error: $program not found"
     exit 1
   fi
@@ -56,12 +57,21 @@ int () {
 
 
 link () {
-  game_id=$1
-  
-  #############################################################################################################################################
-  #############################################################################################################################################
-  #############################################################################################################################################
-  #############################################################################################################################################
+  game_name=$1
+
+  for i in {0..9}
+  do
+    if [ -f "$game_dir/$game_name/$i.open" ]
+    then
+      rm "$game_dir/$game_name/$i.open"
+      cat > "$game_dir/$game_name/$i.in" &
+      while read line < "$game_dir/$game_name/$i.out"
+      do
+        echo $line
+      done
+      return
+    fi
+  done
 }
 
 
@@ -89,31 +99,35 @@ action_create () {
     echo "Enter the number of bot players: "
     read num_bots
     num_bots=$(int $num_bots)
+    num_players=$(expr $num_humans + $num_bots)
     if [ $num_humans -lt 1 ]
     then
       echo "Number of human players must be at least 1. Please try again."
     elif [ $num_bots -lt 0 ]
     then
       echo "Number of bots must be at least 0. Please try again."
-    elif [ $($num_bots + $num_players) -gt 10 ]
+    elif [ $num_players -gt 10 ]
     then
       echo "Total number of players must be at most 10. Please try again."
+    elif [ $num_players -lt 2 ]
+    then
+      echo "Total number of players must be at least 2. Please try again."
     else
       break
     fi
   done
 
   echo "Creating game $game_name with $num_humans human players and $num_bots bot players..."
-
   mkdir "$game_dir/$game_name"
-
-  for i in $(seq 0 $($num_humans - 1))
+  for i in $(seq 0 $(($num_humans - 1)))
   do
-    mkfifo "$game_dir/$game_name/$game_name-$i.in"
-    mkfifo "$game_dir/$game_name/$game_name-$i.out"
-    mkdir "$game_dir/$game_name/$game_name-$i.open"
+    touch "$game_dir/$game_name/$i.open"
+    mkfifo "$game_dir/$game_name/$i.in"
+    mkfifo "$game_dir/$game_name/$i.out"
   done
 
+  echo "Connecting to game $game_name..."
+  $program $game_dir/$game_name $num_humans $num_bots &
   link $game_name
 }
 
@@ -137,7 +151,6 @@ action_join () {
   done
 
   echo "Joining game $game_name..."
-
   link $game_name
 }
 
