@@ -58,7 +58,6 @@ int () {
 
 link () {
   game_name=$1
-
   for i in {0..9}
   do
     if [ -f "$game_dir/$game_name/$i.open" ]
