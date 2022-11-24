@@ -35,7 +35,6 @@ typedef struct stack_s{
 }stack_t;
 
 void deal();
-void init();
 void run();
 
 extern int num_players;
