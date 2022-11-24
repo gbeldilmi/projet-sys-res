@@ -3,16 +3,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#define MIN_PLAYERS 2
+#define MAX_PLAYERS 10
+#define NUM_CARDS 104
+#define NUM_CARD_PER_ROUND 10
+#define NUM_STACKS 4
 
 typedef struct channel_s{
-  FILE *in;
-  FILE *out;
+  int in;
+  int out;
 }channel_t;
 
 typedef struct player_s{
-  int id;
   int score;
-  channel_t channel;
+  channel_t *channel;
+  stack_t *stack;
 }player_t;
 
 typedef struct card_s{
@@ -25,9 +34,10 @@ typedef struct stack_s{
   card_t *cards;
 }stack_t;
 
+void deal();
 void init();
 void run();
 
-extern char *game_dir;
-extern int num_humans;
-extern int num_bots;
+extern int num_players;
+extern player_t **players;
+extern stack_t **stacks;
