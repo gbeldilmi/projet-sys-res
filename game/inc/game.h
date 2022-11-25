@@ -6,12 +6,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <pthread.h>
 
 #define MIN_PLAYERS 2
 #define MAX_PLAYERS 10
+#define MAX_SCORE 66
 #define NUM_CARDS 104
 #define NUM_CARD_PER_ROUND 10
 #define NUM_STACKS 4
+#define MAX_STACK_SIZE 5
 
 typedef struct channel_s{
   int in;
@@ -35,6 +38,7 @@ typedef struct stack_s{
 }stack_t;
 
 void deal();
+void play(int, int *);
 void run();
 
 extern int num_players;
