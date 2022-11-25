@@ -24,7 +24,7 @@ static int read_args(int argc, char **argv){
 static channel_t *open_channel(int id){
   channel_t *channel;
   char *path, *suffix;
-  if (id < 0 || id >= num_players){
+  if(id < 0 || id >= num_players){
     return NULL;
   }
   channel = (channel_t *)malloc(sizeof(channel_t));
@@ -45,7 +45,9 @@ static player_t *new_player(int id_channel){
   player = malloc(sizeof(player_t));
   player->score = 0;
   player->channel = open_channel(id_channel);
-  player->stack = NULL;
+  player->stack = malloc(sizeof(stack_t));
+  player->stack->cards = malloc(NUM_CARD_PER_ROUND * sizeof(card_t));
+  player->stack->size = 0;
 }
 
 int main(int argc, char *argv[]){
