@@ -42,12 +42,20 @@ static channel_t *open_channel(int id){
 
 static player_t *new_player(int id_channel){
   player_t *player;
-  player = malloc(sizeof(player_t));
+  player = (player_t *)malloc(sizeof(player_t));
   player->score = 0;
   player->channel = open_channel(id_channel);
-  player->stack = malloc(sizeof(stack_t));
-  player->stack->cards = malloc(NUM_CARD_PER_ROUND * sizeof(card_t));
+  player->stack = (stack_t *)malloc(sizeof(stack_t));
+  player->stack->cards = (card_t *)malloc(NUM_CARD_PER_ROUND * sizeof(card_t));
   player->stack->size = 0;
+}
+
+static stack_t *new_stack(){
+  stack_t *stack;
+  stack = (stack_t *)malloc(sizeof(stack_t));
+  stack->cards = (card_t *)malloc(MAX_STACK_SIZE * sizeof(card_t));
+  stack->size = 0;
+  return stack;
 }
 
 int main(int argc, char *argv[]){
@@ -55,9 +63,13 @@ int main(int argc, char *argv[]){
   if(read_args(argc, argv)){
     return 1;
   }
-  players = malloc(num_players * sizeof(player_t));
+  players = (player_t *)malloc(num_players * sizeof(player_t));
   for(i = 0; i < num_players; i++){
     players[i] = new_player((i < num_humans) ? i : -1);
+  }
+  stacks = (stack_t *)malloc(NUM_STACKS * sizeof(stack_t));
+  for(i = 0; i < NUM_STACKS; i++){
+    stacks[i] = new_stack();
   }
   run();
   return 0;
