@@ -23,9 +23,9 @@ static int get_heads(int value){
 static stack_t *new_deck(){
   stack_t *deck;
   int i, j;
-  deck = malloc(sizeof(stack_t));
+  deck = (stack_t *)malloc(sizeof(stack_t));
   deck->size = NUM_CARDS;
-  deck->cards = malloc(NUM_CARDS * sizeof(card_t));
+  deck->cards = (card_t *)malloc(NUM_CARDS * sizeof(card_t));
   for(i = 1; i <= NUM_CARDS; i++){
     deck->cards[i].value = i;
     deck->cards[i].heads = get_heads(i);
@@ -48,6 +48,10 @@ void deal(){
       players[j]->stack->cards[i] = deck->cards[i * num_players + j];
       players[i]->stack->size++;
     }
+  }
+  for(i = 0; i < NUM_STACKS; i++){
+    stacks[i]->cards[0] = deck->cards[NUM_CARD_PER_ROUND * num_players + i];
+    stacks[i]->size = 1;
   }
   free (deck->cards);
   free (deck);
