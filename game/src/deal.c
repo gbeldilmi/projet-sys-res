@@ -43,16 +43,10 @@ void deal(){
   int i, j;
   stack_t *deck;
   deck = new_deck();
-  for(i = 0; i < num_players; i++){
-    if(players[0]->stack == NULL){
-      players[i]->stack = malloc(sizeof(stack_t));
-      players[i]->stack->cards = malloc(NUM_CARD_PER_ROUND * sizeof(card_t));
-    }
-    players[i]->stack->size = NUM_CARD_PER_ROUND;
-  }
   for(i = 0; i < NUM_CARD_PER_ROUND; i++){
     for(j = 0; j < num_players; j++){
       players[j]->stack->cards[i] = deck->cards[i * num_players + j];
+      players[i]->stack->size++;
     }
   }
   free (deck->cards);
