@@ -13,9 +13,9 @@ static int win(){
 }
 
 static void play_thread(void *arg){
-  int player;
-  player = (int)arg;
-  play(player, &chosen_cards[player]);
+  int id_player;
+  id_player = (int)arg;
+  chosen_cards[id_player] = (players[id_player]->channel == NULL) ? bot_plays(id_player) : human_plays(id_player);
 }
 
 void run(){
@@ -47,7 +47,6 @@ void run(){
     // update scores
 
     // print cards state
-
 
   }
   free(threads);
