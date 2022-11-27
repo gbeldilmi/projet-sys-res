@@ -38,7 +38,8 @@ typedef struct stack_s{
 }stack_t;
 
 void deal();
-void play(int, int *);
+int bot(int);
+int human(int);
 void run();
 
 extern int num_players;
