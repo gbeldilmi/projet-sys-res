@@ -58,12 +58,14 @@ int () {
 
 link () {
   game_name=$1
+  # search for the first available pipe (delete file.open) and connect user input and output to .in and .out
   for i in {0..9}
   do
     if [ -f "$game_dir/$game_name/$i.open" ]
     then
       rm "$game_dir/$game_name/$i.open"
       cat > "$game_dir/$game_name/$i.in" &
+      # read from .out and print to stdout with read
       while read line < "$game_dir/$game_name/$i.out"
       do
         echo $line

@@ -30,6 +30,7 @@ static stack_t *new_deck(){
     deck->cards[i].value = i;
     deck->cards[i].heads = get_heads(i);
   }
+  // randomize deck
   for(i = 0; i < NUM_CARDS; i++){
     j = rand() % NUM_CARDS;
     card_t temp = deck->cards[i];
