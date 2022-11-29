@@ -21,12 +21,6 @@ typedef struct channel_s{
   int out;
 }channel_t;
 
-typedef struct player_s{
-  int score;
-  channel_t *channel;
-  stack_t *stack;
-}player_t;
-
 typedef struct card_s{
   int value;
   int heads;
@@ -37,9 +31,17 @@ typedef struct stack_s{
   card_t *cards;
 }stack_t;
 
+typedef struct player_s{
+  int score;
+  channel_t *channel;
+  stack_t *stack;
+}player_t;
+
+int bot1(int);
+int bot2(int);
 void deal();
-int bot(int);
-int human(int);
+int human1(int);
+int human2(int);
 void run();
 
 extern int num_players;
