@@ -12,10 +12,10 @@ static int win(){
   return 0;
 }
 
-static void play_thread(void *arg){
+static void play1(void *arg){
   int id_player;
   id_player = (int)arg;
-  chosen_cards[id_player] = (players[id_player]->channel == NULL) ? bot_plays(id_player) : human_plays(id_player);
+  chosen_cards[id_player] = (players[id_player]->channel == NULL) ? bot1(id_player) : human1(id_player);
 }
 
 void run(){
@@ -28,7 +28,7 @@ void run(){
       deal();
     }
     for(i = 0; i < num_players; i++){
-      pthread_create(&threads[i], NULL, (void *)play_thread, (void *)i);
+      pthread_create(&threads[i], NULL, (void *)play1, (void *)i);
     }
     for(i = 0; i < num_players; i++){
       pthread_join(threads[i], NULL);
