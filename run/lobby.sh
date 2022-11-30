@@ -56,6 +56,24 @@ int () {
 }
 
 
+write_fifo () {
+  out="$1"
+  while read line
+  do
+    echo "$line" >> "$out"
+  done
+}
+
+
+read_fifo () {
+  in="$1"
+  while read line < $in
+  do
+    echo $line
+  done
+}
+
+
 link () {
   game_name=$1
   # search for the first available pipe (delete file.open) and connect user input and output to .in and .out
@@ -64,12 +82,9 @@ link () {
     if [ -f "$game_dir/$game_name/$i.open" ]
     then
       rm "$game_dir/$game_name/$i.open"
-      cat > "$game_dir/$game_name/$i.in" &
       # read from .out and print to stdout with read
-      while read line < "$game_dir/$game_name/$i.out"
-      do
-        echo $line
-      done
+      read_fifo "$game_dir/$game_name/$i.out" &
+      write_fifo "$game_dir/$game_name/$i.in"
       return
     fi
   done
