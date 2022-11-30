@@ -37,11 +37,11 @@ static channel_t *open_channel(int id){
   sprintf(suffix, "/%d.in", id);
   strcpy(path, game_dir);
   strcat(path, suffix);
-  channel->in = fopen(game_dir, O_RDONLY);
+  channel->in = fopen(game_dir, "r");
   sprintf(suffix, "/%d.out", id);
   strcpy(path, game_dir);
   strcat(path, suffix);
-  channel->out = fopen(game_dir, O_WRONLY);
+  channel->out = fopen(game_dir, "w");
   free(path);
   free(suffix);
   return channel;

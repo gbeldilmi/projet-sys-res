@@ -49,7 +49,7 @@ static int choose_card(){
   fprintf(out, "Choose a card: ");
   c = -1;
   while(c < 0 || c >= player->stack->size){
-    read(in, &c, sizeof(char));
+    c = fgetc(in);
     if(c >= 'a' && c <= 'z'){
       c -= 'a';
     }else if(c >= 'A' && c <= 'Z'){

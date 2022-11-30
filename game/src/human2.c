@@ -72,7 +72,7 @@ static int choose_stack(){
   fprintf(out, "Choose a stack: ");
   c = -1;
   while(c < 0 || c >= NUM_STACKS){
-    read(in, &c, sizeof(char));
+    c = fgetc(in);
     if(c >= 'a' && c <= 'z'){
       c -= 'a';
     }else if(c >= 'A' && c <= 'Z'){
