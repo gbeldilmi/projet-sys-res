@@ -1,75 +1,75 @@
 #include "game.h"
 
 static player_t *player;
-static int in, out;
+static FILE *in, *out;
 
 static void print_stack(stack_t *stack, int id){
   int i, j, l;
   l = stack->size;
   for(i = -1; i < l; i++){
     if(i == -1){
-      printf("   ");
+      fprintf(out, "   ");
     }else{
-      dprintf(out, "----- ");
+      fprintf(out, "----- ");
     }
   }
-  dprintf(out, "\n");
+  fprintf(out, "\n");
   j = stack->cards[i].value;
   for(i = -1; i < l; i++){
     if(i == -1){
       printf(" %c ", 'A' + id);
     }else{
       if(j < 9){
-        dprintf(out, "|  %d| ", j);
+        fprintf(out, "|  %d| ", j);
       }else if(j < 99){
-        dprintf(out, "| %d| ", j);
+        fprintf(out, "| %d| ", j);
       }else{
-        dprintf(out, "|%d| ", j);
+        fprintf(out, "|%d| ", j);
       }
     }
   }
-  dprintf(out, "\n");
+  fprintf(out, "\n");
   j = stack->cards[i].heads;
   for(i = -1; i < l; i++){
     if(i == -1){
       printf("   ");
     }else{
-      dprintf(out, "|%d ¤| ", j);
+      fprintf(out, "|%d ¤| ", j);
     }
   }
-  dprintf(out, "\n");
+  fprintf(out, "\n");
   for(i = -1; i < l; i++){
     if(i == -1){
       printf("   ");
     }else{
-      dprintf(out, "----- ");
+      fprintf(out, "----- ");
     }
   }
-  dprintf(out, "\n");
+  fprintf(out, "\n");
 }
 
 static void print_stacks(){
   int i;
   for(i = 0; i < NUM_STACKS; i++){
-    print_stack(stacks[i], i);
+    print_stack(&stacks[i], i);
   }
 }
 
 static void print_card(card_t card){
-  dprintf(out, "   ----- \n   |");
+  fprintf(out, "   ----- \n   |");
   if(card.value < 9){
-    dprintf(out, "  %d", card.value);
+    fprintf(out, "  %d", card.value);
   }else if(card.value < 99){
-    dprintf(out, " %d", card.value);
+    fprintf(out, " %d", card.value);
   }else{
-    dprintf(out, "%d", card.value);
+    fprintf(out, "%d", card.value);
   }
-  dprintf(out, "| \n   |%d ¤| \n   ----- \n", card.heads);
+  fprintf(out, "| \n   |%d ¤| \n   ----- \n", card.heads);
 }
 
 static int choose_stack(){
   int c;
-  dprintf(out, "Choose a stack: ");
+  fprintf(out, "Choose a stack: ");
   c = -1;
   while(c < 0 || c >= NUM_STACKS){
     read(in, &c, sizeof(char));
@@ -78,16 +78,16 @@ static int choose_stack(){
     }else if(c >= 'A' && c <= 'Z'){
       c -= 'A';
     }else{
-      dprintf(out, "Invalid stack. Choose again: ");
+      fprintf(out, "Invalid stack. Choose again: ");
       c = -1;
     }
   }
-  dprintf(out, "Waiting for others players...\n");
+  fprintf(out, "Waiting for others players...\n");
   return c;
 }
 
 int human2(int id_player){
-  player = players[id_player];
+  player = &players[id_player];
   in = player->channel->in;
   out = player->channel->out;
   print_stacks();

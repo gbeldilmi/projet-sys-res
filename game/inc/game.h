@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #define MIN_PLAYERS 2
 #define MAX_PLAYERS 10
@@ -17,8 +18,8 @@
 #define MAX_STACK_SIZE 5
 
 typedef struct channel_s{
-  int in;
-  int out;
+  FILE *in;
+  FILE *out;
 }channel_t;
 
 typedef struct card_s{
@@ -45,5 +46,5 @@ int human2(int);
 void run();
 
 extern int num_players;
-extern player_t **players;
-extern stack_t **stacks;
+extern player_t *players;
+extern stack_t *stacks;

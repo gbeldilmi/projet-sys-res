@@ -46,13 +46,13 @@ void deal(){
   deck = new_deck();
   for(i = 0; i < NUM_CARD_PER_ROUND; i++){
     for(j = 0; j < num_players; j++){
-      players[j]->stack->cards[i] = deck->cards[i * num_players + j];
-      players[i]->stack->size++;
+      players[j].stack->cards[i] = deck->cards[i * num_players + j];
+      players[i].stack->size++;
     }
   }
   for(i = 0; i < NUM_STACKS; i++){
-    stacks[i]->cards[0] = deck->cards[NUM_CARD_PER_ROUND * num_players + i];
-    stacks[i]->size = 1;
+    stacks[i].cards[0] = deck->cards[NUM_CARD_PER_ROUND * num_players + i];
+    stacks[i].size = 1;
   }
   free (deck->cards);
   free (deck);

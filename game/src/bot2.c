@@ -5,7 +5,7 @@ static player_t *player;
 static int score1(card_t card, int id_stack){
   stack_t *stack;
   int s;
-  stack = stacks[id_stack];
+  stack = &stacks[id_stack];
   if(stack->size == MAX_STACK_SIZE || card.value < stack->cards[stack->size - 1].value){
     // If the stack is full or the card value is smaller than the last card of the stack
     s = -1;
@@ -18,19 +18,17 @@ static int score1(card_t card, int id_stack){
 }
 
 static int score2(int id_stack){
-  stack_t *stack;
   int i, s;
-  stack = stacks[id_stack];
   // Get the sum of the heads of the stack
-  for(i = 0, s = 0; i < stack->size; i++){
-    s += stack->cards[i].heads;
+  for(i = 0, s = 0; i < stacks[id_stack].size; i++){
+    s += stacks[id_stack].cards[i].heads;
   }
   return s;
 }
 
 int bot2(int id_player){
   int i, j, *s;
-  player = players[id_player];
+  player = &players[id_player];
   s = malloc(sizeof(int) * NUM_STACKS);
   // Calculate scores for each stack and choose the best
   for(i = 0; i < NUM_STACKS; i++){
