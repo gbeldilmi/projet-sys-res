@@ -1,6 +1,6 @@
 #include "game.h"
 
-static int *chosen_cards;
+static int *chosen_cards, *players_order;
 
 static int win(){
   int i;
@@ -18,12 +18,62 @@ static void play1(void *arg){
   chosen_cards[id_player] = (players[id_player]->channel == NULL) ? bot1(id_player) : human1(id_player);
 }
 
+static void sort_cards(){
+  stack_t *ps;
+  card_t a, b;
+  int i, j, k;
+  for(i = 0; i < num_players; i++){
+    ps = players[i]->stack;
+    a = ps->cards[chosen_cards[i]];
+    b = ps->cards[ps->size - 1];
+    ps->cards[chosen_cards[i]] = b;
+    ps->cards[ps->size - 1] = a;
+    ps->size--;
+  }
+  // get the order of the players who will play by the value of the card (lowest first)
+  for(i = 0; i < num_players; i++){
+    players_order[i] = i;
+  }
+  for(i = 0; i < num_players; i++){
+    for(j = i + 1; j < num_players; j++){
+      if(players[players_order[i]]->stack->cards[players[players_order[i]]->stack->size].value
+          > players[players_order[j]]->stack->cards[players[players_order[j]]->stack->size].value){
+        k = players_order[i];
+        players_order[i] = players_order[j];
+        players_order[j] = k;
+      }
+    }
+  }
+}
+
+static void play2(int id_player, int id_card){
+  int cs, i, sh;
+  cs = (players[id_player]->channel == NULL) ? bot2(id_player) : human2(id_player);
+  if(stacks[cs]->size < MAX_STACK_SIZE){
+    stacks[cs]->cards[stacks[cs]->size] = players[id_player]->stack->cards[id_card];
+    stacks[cs]->size++;
+  }else{
+    sh = 0;
+    for(i = 0; i < stacks[cs]->size; i++){
+      sh += stacks[cs]->cards[i].heads;
+    }
+    players[id_player]->score += sh;
+    stacks[cs]->cards[0] = players[id_player]->stack->cards[id_card];
+    stacks[cs]->size = 1;
+    if(players[id_player]->channel){
+      dprintf(players[id_player]->channel->out, "You got %d heads!\n", sh);
+    }
+  }
+}
+
 void run(){
   pthread_t *threads;
-  int i;
+  int i, s, w;
   threads = (pthread_t *)malloc(num_players * sizeof(pthread_t));
   chosen_cards = (int *)malloc(num_players * sizeof(int));
-  while(!win()){
+  players_order = (int *)malloc(num_players * sizeof(int));
+  w = 0;
+  while(!w){
     if(players[0]->stack->size == 0){
       deal();
     }
@@ -33,21 +83,11 @@ void run(){
     for(i = 0; i < num_players; i++){
       pthread_join(threads[i], NULL);
     }
-    
-    // play round
-
-    // print cards state
-    
-    // ask cards to players
-
-    // print cards state
-
-    // play cards
-
-    // update scores
-
-    // print cards state
-
+    sort_cards();
+    for(i = 0; i < num_players && !w; i++){
+      play2(players_order[i], chosen_cards[players_order[i]]);
+      w = win();
+    }
   }
   free(threads);
   free(chosen_cards);

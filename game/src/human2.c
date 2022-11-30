@@ -55,16 +55,16 @@ static void print_stacks(){
   }
 }
 
-static void print_card(card_t *card){
+static void print_card(card_t card){
   dprintf(out, "   ----- \n   |");
-  if(card->value < 9){
-    dprintf(out, "  %d", card->value);
-  }else if(card->value < 99){
-    dprintf(out, " %d", card->value);
+  if(card.value < 9){
+    dprintf(out, "  %d", card.value);
+  }else if(card.value < 99){
+    dprintf(out, " %d", card.value);
   }else{
-    dprintf(out, "%d", card->value);
+    dprintf(out, "%d", card.value);
   }
-  dprintf(out, "| \n   |%d ¤| \n   ----- \n", card->heads);
+  dprintf(out, "| \n   |%d ¤| \n   ----- \n", card.heads);
 }
 
 static int choose_stack(){
@@ -82,14 +82,15 @@ static int choose_stack(){
       c = -1;
     }
   }
+  dprintf(out, "Waiting for others players...\n");
   return c;
 }
 
-int human2(int id_player, card_t *card){
+int human2(int id_player){
   player = players[id_player];
   in = player->channel->in;
   out = player->channel->out;
   print_stacks();
-  print_card(card);
+  print_card(player->stack->cards[player->stack->size]);
   return choose_stack();
 }

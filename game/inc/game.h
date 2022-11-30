@@ -38,10 +38,10 @@ typedef struct player_s{
 }player_t;
 
 int bot1(int);
-int bot2(int, card_t *);
+int bot2(int);
 void deal();
 int human1(int);
-int human2(int, card_t *);
+int human2(int);
 void run();
 
 extern int num_players;

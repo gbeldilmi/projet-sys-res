@@ -59,6 +59,7 @@ static int choose_card(){
       c = -1;
     }
   }
+  dprintf(out, "Waiting for others players...\n");
   return c;
 }
 
