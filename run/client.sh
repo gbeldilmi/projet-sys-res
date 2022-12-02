@@ -18,7 +18,7 @@ p=$begin_port
 while $running
 do
   echo "Connecting to $server @$p"
-  netcat -c $server $p
+  netcat $server $p
   if [[ $? -eq 0 ]]
   then
     echo "Connection closed @$p"

@@ -8,96 +8,96 @@ static char *game_dir;
 static int num_humans;
 static int num_bots;
 
-static int read_args(int argc, char **argv){
+static void read_args(int argc, char **argv){
   if(argc < 4){
     printf("Usage: %s <game_dir> <num_humans> <num_bots>", argv[0]);
-    return 1;
+    exit(EXIT_FAILURE);
   }
   game_dir = (char *)malloc(strlen(argv[1]) + 1);
+  if(game_dir == NULL){
+    printf("Error allocating memory for game_dir");
+    exit(EXIT_FAILURE);
+  }
   strcpy(game_dir, argv[1]);
   num_humans = atoi(argv[2]);
   num_bots = atoi(argv[3]);
   num_players = num_humans + num_bots;
   if(num_humans <= 0 || num_bots < 0 || num_players < MIN_PLAYERS || num_players > MAX_PLAYERS){
     printf("Invalid number of players");
-    return 1;
+    exit(EXIT_FAILURE);
   }
-  return 0;
 }
 
-static channel_t *open_channel(int id){
-  channel_t *channel;
-  char *path, *suffix;
-  if(id < 0 || id >= num_players){
-    return NULL;
+static void open_fifo(player_t *player){
+  char path[strlen(game_dir) + 16];
+  sprintf(path, "%s/%d.in", game_dir, player->id);
+  player->in = fopen(path, "r");
+  if(player->in == NULL){
+    printf("Error opening input fifo for player %d", player->id);
+    exit(EXIT_FAILURE);
   }
-  channel = (channel_t *)malloc(sizeof(channel_t));
-  path = (char *)malloc(strlen(game_dir) + 16);
-  suffix = (char *)malloc(16);
-  sprintf(suffix, "/%d.in", id);
-  strcpy(path, game_dir);
-  strcat(path, suffix);
-  channel->in = fopen(game_dir, "r");
-  sprintf(suffix, "/%d.out", id);
-  strcpy(path, game_dir);
-  strcat(path, suffix);
-  channel->out = fopen(game_dir, "w");
-  free(path);
-  free(suffix);
-  return channel;
+  sprintf(path, "%s/%d.out", game_dir, player->id);
+  player->out = fopen(path, "a");
+  if(player->out == NULL){
+    printf("Error opening output fifo for player %d", player->id);
+    exit(EXIT_FAILURE);
+  }
 }
 
-static player_t *new_player(int id_channel){
-  player_t *player;
-  player = (player_t *)malloc(sizeof(player_t));
-  player->score = 0;
-  player->channel = open_channel(id_channel);
-  player->stack = (stack_t *)malloc(sizeof(stack_t));
-  player->stack->cards = (card_t *)malloc(NUM_CARD_PER_ROUND * sizeof(card_t));
-  player->stack->size = 0;
-  return player;
-}
-
-static stack_t *new_stack(){
-  stack_t *stack;
-  stack = (stack_t *)malloc(sizeof(stack_t));
-  stack->cards = (card_t *)malloc(MAX_STACK_SIZE * sizeof(card_t));
-  stack->size = 0;
-  return stack;
-}
-
-static void bye(){
+static void init_players(void){
   int i;
+  players = (player_t *)malloc(num_players * sizeof(player_t));
+  if(players == NULL){
+    printf("Error allocating memory for players");
+    exit(EXIT_FAILURE);
+  }
   for(i = 0; i < num_players; i++){
-    free(players[i].stack->cards);
-    free(players[i].stack);
-    if(players[i].channel){
-      fclose(players[i].channel->in);
-      fclose(players[i].channel->out);
-      free(players[i].channel);
+    players[i].id = i;
+    players[i].score = 0;
+    players[i].stack.size = 0;
+    players[i].stack.cards = (card_t *)malloc(NUM_CARD_PER_ROUND * sizeof(card_t));
+    if(players[i].stack.cards == NULL){
+      printf("Error allocating memory for player %d stack", i);
+      exit(EXIT_FAILURE);
+    }
+    players[i].in = players[i].out = NULL;
+    if(i < num_humans){
+      open_fifo(&players[i]);
     }
   }
-  free(players);
-  for(i = 0; i < NUM_STACKS; i++){
-    free(stacks[i].cards);
+  free(game_dir);
+}
+
+static void init_stacks(void){
+  int i;
+  stacks = (stack_t *)malloc(NUM_STACKS * sizeof(stack_t));
+  if(stacks == NULL){
+    printf("Error allocating memory for stacks");
+    exit(EXIT_FAILURE);
   }
-  free(stacks);
+  for(i = 0; i < NUM_STACKS; i++){
+    stacks[i].size = 0;
+    stacks[i].cards = (card_t *)malloc(MAX_STACK_SIZE * sizeof(card_t));
+    if(stacks[i].cards == NULL){
+      printf("Error allocating memory for stack %d", i);
+      exit(EXIT_FAILURE);
+    }
+  }
+}
+
+static void bye(void){
+  int i;
+  for(i = 0; i < num_players; i++){
+
+  }
+  
 }
 
 int main(int argc, char *argv[]){
-  int i;
-  if(read_args(argc, argv)){
-    return 1;
-  }
-  players = (player_t *)malloc(num_players * sizeof(player_t));
-  for(i = 0; i < num_players; i++){
-    players[i] = *(new_player((i < num_humans) ? i : -1));
-  }
-  stacks = (stack_t *)malloc(NUM_STACKS * sizeof(stack_t));
-  for(i = 0; i < NUM_STACKS; i++){
-    stacks[i] = *(new_stack());
-  }
+  read_args(argc, argv);
+  init_players();
+  init_stacks();
   run();
   bye();
-  return 0;
+  return EXIT_SUCCESS;
 }

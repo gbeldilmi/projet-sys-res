@@ -1,9 +1,6 @@
 #include "game.h"
 
-static player_t *player;
-static FILE *in, *out;
-
-static void print_stack(stack_t *stack){
+static void print_stack(FILE* out, stack_t *stack){
   int i, j, l;
   l = stack->size;
   for(i = 0; i < l; i++){
@@ -32,41 +29,38 @@ static void print_stack(stack_t *stack){
   fprintf(out, "\n");
 }
 
-static void print_stacks(){
+static void print_stacks(player_t *player){
   int i;
   for(i = 0; i < NUM_STACKS; i++){
-    print_stack(&stacks[i]);
+    print_stack(player->out, &stacks[i]);
   }
-  fprintf(out, "\n\n");
-  print_stack(player->stack);
-  for(i = 0; i < player->stack->size; i++){
-    fprintf(out, "-%c- ", 'A' + i);
+  fprintf(player->out, "\n\n");
+  print_stack(player->out, &player->stack);
+  for(i = 0; i < player->stack.size; i++){
+    fprintf(player->out, "-%c- ", 'A' + i);
   }
 }
 
-static int choose_card(){
+static int choose_card(player_t *player){
   int c;
-  fprintf(out, "Choose a card: ");
+  fprintf(player->out, "Choose a card: ");
   c = -1;
-  while(c < 0 || c >= player->stack->size){
-    c = fgetc(in);
+  while(c < 0 || c >= player->stack.size){
+    c = fgetc(player->in);
     if(c >= 'a' && c <= 'z'){
       c -= 'a';
     }else if(c >= 'A' && c <= 'Z'){
       c -= 'A';
     }else{
-      fprintf(out, "Invalid card. Choose again: ");
+      fprintf(player->out, "Invalid card. Choose again: ");
       c = -1;
     }
   }
-  fprintf(out, "Waiting for others players...\n");
+  fprintf(player->out, "Waiting for others players...\n");
   return c;
 }
 
-int human1(int id_player){
-  player = &players[id_player];
-  in = player->channel->in;
-  out = player->channel->out;
-  print_stacks();
-  return choose_card();
+int human1(player_t *player){
+  print_stacks(player);
+  return choose_card(player);
 }

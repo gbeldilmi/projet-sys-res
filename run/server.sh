@@ -16,7 +16,7 @@ run () {
   while true
   do
     echo "Opening connection @$1"
-    netcat -l -p $1 -c -e $program
+    netcat -l -p $1 -e $program
     echo "Connection closed @$1"
   done
 }

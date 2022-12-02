@@ -1,68 +1,55 @@
 #include "game.h"
 
-static player_t *player;
-static int **plays;
-
-static int f_head(int id_stack){
+static int f_head(stack_t *stack){
   int i, s;
   // more there are heads in the stack, more the score is high
-  for(i = 0, s = 0; i < stacks[id_stack].size; i++){
-    s += stacks[id_stack].cards[i].heads;
+  for(i = 0, s = 0; i < stack->size; i++){
+    s += stack->cards[i].heads;
   }
   return s * 10;
 }
 
-static int f_number(int id_stack, int id_card){
+static int f_number(stack_t *stack, int id_card){
   int s;
-  if(stacks[id_stack].size == 0){
+  if(stack->size == 0){
     // if the stack is empty
     s = 0;
   }else{
-    s = stacks[id_stack].cards[id_card].value - stacks[id_stack].cards[stacks[id_stack].size - 1].value;
-    s *= stacks[id_stack].size;
+    s = stack->cards[id_card].value - stack->cards[stack->size - 1].value;
+    s *= stack->size;
   }
   return s;
 }
 
-static int score(int id_card, int id_stack){
-  if(player->stack->cards[id_card].value < stacks[id_stack].cards[stacks[id_stack].size - 1].value
-      || stacks[id_stack].size == MAX_STACK_SIZE){
-    return f_head(id_stack);
+static int score(player_t *player, stack_t *stack, int id_card){
+  if(player->stack.cards[id_card].value < stack->cards[stack->size - 1].value
+      || stack->size == MAX_STACK_SIZE){
+    return f_head(stack);
   } else {
-    return f_number(id_stack, id_card);
+    return f_number(stack, id_card);
   }
 }
 
-int bot1(int id_player){
-  int i, j, best_score, best_card, best_stack;
-  player = &players[id_player];
-  // Allocate memory for plays
+int bot1(player_t *player){
+  int i, j, bs, bc, plays[player->stack.size][NUM_STACKS];
   // plays[id_card][id_stack] = score
-  plays = malloc(player->stack->size * sizeof(int *));
-  for(i = 0; i < player->stack->size; i++){
-    plays[i] = malloc(NUM_STACKS * sizeof(int));
+  for(i = 0; i < player->stack.size; i++){
     for(j = 0; j < NUM_STACKS; j++){
-      plays[i][j] = score(i, j);
+      plays[i][j] = score(player, &stacks[i], j);
     }
   }
   // Eventually make an average or median of scores for each card
   //////////////////////////////////////////////////////////////////////////////
   // Choose best play (lowest score)
-  best_score = 99999;
-  best_card = best_stack = -1;
-  for(i = 0; i < player->stack->size; i++){
+  bs = 99999;
+  bc = -1;
+  for(i = 0; i < player->stack.size; i++){
     for(j = 0; j < NUM_STACKS; j++){
-      if(plays[i][j] < best_score){
-        best_score = plays[i][j];
-        best_card = i;
-        best_stack = j;
+      if(plays[i][j] < bs){
+        bs = plays[i][j];
+        bc = i;
       }
     }
   }
-  // Free memory
-  for(i = 0; i < player->stack->size; i++){
-    free(plays[i]);
-  }
-  free(plays);
-  return best_card;
+  return bc;
 }

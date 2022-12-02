@@ -17,11 +17,6 @@
 #define NUM_STACKS 4
 #define MAX_STACK_SIZE 5
 
-typedef struct channel_s{
-  FILE *in;
-  FILE *out;
-}channel_t;
-
 typedef struct card_s{
   int value;
   int heads;
@@ -33,17 +28,19 @@ typedef struct stack_s{
 }stack_t;
 
 typedef struct player_s{
+  int id;
   int score;
-  channel_t *channel;
-  stack_t *stack;
+  FILE *in;
+  FILE *out;
+  stack_t stack;
 }player_t;
 
-int bot1(int);
-int bot2(int);
+int bot1(player_t *);
+int bot2(player_t *);
 void deal();
-int human1(int);
-int human2(int);
-void run();
+int human1(player_t *);
+int human2(player_t *);
+void run(void);
 
 extern int num_players;
 extern player_t *players;
