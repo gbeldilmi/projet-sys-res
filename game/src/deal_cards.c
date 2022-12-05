@@ -33,19 +33,12 @@ static void init_deck(stack_t *deck){
     deck->cards[i].value = i;
     deck->cards[i].heads = f_heads(i);
   }
-  for(i = 1; i <= NUM_CARDS; i++){
-    fprintf(stderr, "%d(%d) ", deck->cards[i].value, deck->cards[i].heads);
-  }
-  fprintf(stderr, "\n");
   // randomize deck
   for(i = 0; i < NUM_CARDS; i++){
     j = rand() % NUM_CARDS;
     c = deck->cards[i];
     deck->cards[i] = deck->cards[j];
     deck->cards[j] = c;
-  }
-  for(i = 1; i <= NUM_CARDS; i++){
-    fprintf(stderr, "%d(%d) ", deck->cards[i].value, deck->cards[i].heads);
   }
 }
 
