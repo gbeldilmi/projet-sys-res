@@ -7,4 +7,5 @@ void print_state_2(player_t *player){
   }
   fprintf(player->out, "\n");
   print_cards(player->out, player->stack.cards + player->stack.size, 1, -1);
+  fprintf(player->out, "\n");
 }

@@ -57,18 +57,20 @@ int () {
 
 
 write_fifo () {
-  out="$1"
-  while read line
+  in="$1"
+  while true
   do
-    echo "$line" >> "$out"
+    read line
+    echo "$line" >> "$in"
   done
 }
 
 
 read_fifo () {
-  in="$1"
-  while read line < $in
+  out="$1"
+  while true
   do
+    read line < "$out"
     echo $line
   done
 }
