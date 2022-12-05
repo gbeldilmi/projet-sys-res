@@ -42,6 +42,7 @@ static void open_fifo(player_t *player){
     printf("Error opening output fifo for player %d", player->id);
     exit(EXIT_FAILURE);
   }
+  
 }
 
 static void init_players(void){
@@ -85,19 +86,12 @@ static void init_stacks(void){
   }
 }
 
-static void bye(void){
-  int i;
-  for(i = 0; i < num_players; i++){
-
-  }
-  
-}
-
 int main(int argc, char *argv[]){
   read_args(argc, argv);
   init_players();
   init_stacks();
+  debug();
+  atexit(bye);
   run();
-  bye();
   return EXIT_SUCCESS;
 }

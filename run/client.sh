@@ -9,7 +9,7 @@ fi
 
 server="$1"
 begin_port=8777
-number_port=3
+number_port=1
 
 running=true
 

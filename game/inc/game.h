@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #define MIN_PLAYERS 2
 #define MAX_PLAYERS 10
@@ -35,12 +36,25 @@ typedef struct player_s{
   stack_t stack;
 }player_t;
 
-int bot1(player_t *);
-int bot2(player_t *);
-void deal();
-int human1(player_t *);
-int human2(player_t *);
+void bye(void);
+int choose_card(player_t *player);
+int choose_stack(player_t *player);
+void deal_cards(void);
+void debug(void);
+int game_is_ended(void);
+int play_1(void *arg);
+void play_2(player_t *player, int id_card);
+int play_bot_1(player_t *player);
+int play_bot_2(player_t *player);
+int play_human_1(player_t *player);
+int play_human_2(player_t *player);
+void podium(void);
+void print_cards(FILE* out, card_t *cards, int size, int id);
+void print_state_1(player_t *player);
+void print_state_2(player_t *player);
+int read_input(FILE *in);
 void run(void);
+void sort_cards(int *chosen, int *order);
 
 extern int num_players;
 extern player_t *players;

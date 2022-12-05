@@ -84,7 +84,7 @@ link () {
       rm "$game_dir/$game_name/$i.open"
       # read from .out and print to stdout with read
       read_fifo "$game_dir/$game_name/$i.out" &
-      write_fifo "$game_dir/$game_name/$i.in"
+      write_fifo "$game_dir/$game_name/$i.in" &
       return
     fi
   done
@@ -143,16 +143,17 @@ action_create () {
   done
 
   echo "Connecting to game $game_name..."
-  $program $game_dir/$game_name $num_humans $num_bots &
   link $game_name
+  $program $game_dir/$game_name $num_humans $num_bots
 }
 
 
 action_join () {
-  echo "Available games: "
-  ls $game_dir
   while true
   do
+    echo "Available games: "
+    ls $game_dir
+    
     echo "Enter the name of the game you want to join: "
     read game_name
     if [ -z "$game_name" ]

@@ -30,7 +30,7 @@ static int score(player_t *player, stack_t *stack, int id_card){
   }
 }
 
-int bot1(player_t *player){
+int play_bot_1(player_t *player){
   int i, j, bs, bc, plays[player->stack.size][NUM_STACKS];
   // plays[id_card][id_stack] = score
   for(i = 0; i < player->stack.size; i++){

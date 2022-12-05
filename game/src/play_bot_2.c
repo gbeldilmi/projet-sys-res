@@ -1,6 +1,6 @@
 #include "game.h"
 
-static int score1(stack_t *stack, card_t card){
+static int score_1(stack_t *stack, card_t card){
   int s;
   if(stack->size == MAX_STACK_SIZE || card.value < stack->cards[stack->size - 1].value){
     // If the stack is full or the card value is smaller than the last card of the stack
@@ -12,7 +12,7 @@ static int score1(stack_t *stack, card_t card){
   return s;
 }
 
-static int score2(stack_t *stack){
+static int score_2(stack_t *stack){
   int i, s;
   // Get the sum of the heads of the stack
   for(i = s = 0; i < stack->size; i++){
@@ -21,11 +21,11 @@ static int score2(stack_t *stack){
   return s;
 }
 
-int bot2(player_t *player){
+int play_bot_2(player_t *player){
   int i, j, s[NUM_STACKS];
   // Calculate scores for each stack and choose the best
   for(i = 0; i < NUM_STACKS; i++){
-    s[i] = score1(&stacks[i], player->stack.cards[player->stack.size]);
+    s[i] = score_1(&stacks[i], player->stack.cards[player->stack.size]);
   }
   // Get the best score (highest)
   j = 0;
@@ -40,7 +40,7 @@ int bot2(player_t *player){
   }
   // Else, get the lowest penalty
   for(i = 0; i < NUM_STACKS; i++){
-    s[i] = score2(&stacks[i]);
+    s[i] = score_2(&stacks[i]);
   }
   // Get the best score (lowest)
   j = 0;

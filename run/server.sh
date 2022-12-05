@@ -3,7 +3,7 @@
 
 program="./run/lobby.sh"
 start_port=8777
-number_port=3
+number_port=1
 
 
 close () {

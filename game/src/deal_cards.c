@@ -1,6 +1,6 @@
 #include "game.h"
 
-static int get_heads(int value){
+static int f_heads(int value){
   int heads, tens, units;
   heads = 0;
   tens = value - (value % 10) / 10;
@@ -21,8 +21,8 @@ static int get_heads(int value){
 }
 
 static void init_deck(stack_t *deck){
-  card_t c;
-  int i, j;
+  //card_t c;
+  int i/*, j*/;
   deck->size = NUM_CARDS;
   deck->cards = (card_t *)malloc(NUM_CARDS * sizeof(card_t));
   if(deck->cards == NULL){
@@ -31,18 +31,21 @@ static void init_deck(stack_t *deck){
   }
   for(i = 1; i <= NUM_CARDS; i++){
     deck->cards[i].value = i;
-    deck->cards[i].heads = get_heads(i);
+    deck->cards[i].heads = f_heads(i);
+  }
+  for(i = 1; i <= NUM_CARDS; i++){
+    printf("%d - %d\n", deck->cards[i].value, deck->cards[i].heads);
   }
   // randomize deck
-  for(i = 0; i < NUM_CARDS; i++){
+  /*for(i = 0; i < NUM_CARDS; i++){
     j = rand() % NUM_CARDS;
     c = deck->cards[i];
     deck->cards[i] = deck->cards[j];
     deck->cards[j] = c;
-  }
+  }//*/
 }
 
-void deal(){
+void deal_cards(void){
   stack_t deck;
   int i, j;
   init_deck(&deck);
@@ -52,9 +55,9 @@ void deal(){
       players[i].stack.size++;
     }
   }
-  for(i = 0; i < NUM_STACKS; i++){
+  while(i < NUM_STACKS){
     stacks[i].cards[0] = deck.cards[NUM_CARD_PER_ROUND * num_players + i];
-    stacks[i].size = 1;
+    stacks[i++].size = 1;
   }
   free (deck.cards);
 }
