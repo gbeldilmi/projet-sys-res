@@ -2,7 +2,7 @@
 
 void run(void){
   pthread_t threads[num_players];
-  int i, r, chosen[num_players], order[num_players];
+  int i, r, order[num_players];
   r = 0;
   while(!r){
     if(players[0].stack.size == 0){
@@ -11,12 +11,13 @@ void run(void){
     for(i = 0; i < num_players; i++){
       pthread_create(&threads[i], NULL, (void *)play_1, (void *)&players[i]);
     }
+    sleep(5);
     for(i = 0; i < num_players; i++){
-      pthread_join(threads[i], (void **)&chosen[i]);
+      pthread_join(threads[i], NULL);
     }
-    sort_cards(chosen, order);
+    get_order(order);
     for(i = 0; i < num_players && !r; i++){
-      play_2(&players[order[i]], chosen[order[i]]);
+      play_2(&players[order[i]]);
       r = game_is_ended();
     }
   }
