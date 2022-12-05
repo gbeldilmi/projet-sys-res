@@ -7,6 +7,8 @@ void run(void){
   while(!r){
     if(players[0].stack.size == 0){
       deal_cards();
+      fprintf(stderr, "Dealing cards\n");
+      debug();
     }
     for(i = 0; i < num_players; i++){
       pthread_create(&threads[i], NULL, (void *)play_1, (void *)&players[i]);
