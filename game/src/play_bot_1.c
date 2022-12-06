@@ -35,7 +35,7 @@ int play_bot_1(player_t *player){
   // plays[id_card][id_stack] = score
   for(i = 0; i < player->stack.size; i++){
     for(j = 0; j < NUM_STACKS; j++){
-      plays[i][j] = score(player, &stacks[i], j);
+      plays[i][j] = score(player, &stacks[j], i);
     }
   }
   // Eventually make an average or median of scores for each card
