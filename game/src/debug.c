@@ -1,5 +1,11 @@
 #include "game.h"
 
+/******************************************************************************
+ * Print every card of a stack.                                               *
+ * -> stack_t *s :                                                            *
+ *      stack to print.                                                       *
+ * <- void                                                                    *
+ ******************************************************************************/
 static void debug_cards(stack_t * s){
   int i;
   for(i = 0; i < s->size; i++){
@@ -7,28 +13,24 @@ static void debug_cards(stack_t * s){
   }
 }
 
+/******************************************************************************
+ * Print every information about a player.                                    *
+ * -> player_t *p :                                                           *
+ *      player to print.                                                      *
+ * <- void                                                                    *
+ ******************************************************************************/
 static void debug_player(player_t *p){
-  fprintf(stderr, "Player:\n\tid: %d\n\tscore: %d\n\tin: ", p->id, p->score);
-  if(p->in){
-    fprintf(stderr, "yes");
-  }else{
-    fprintf(stderr, "no");
-  }
-  fprintf(stderr, "\n\tout: ");
-  if(p->out){
-    fprintf(stderr, "yes");
-  }else{
-    fprintf(stderr, "no");
-  }
-  fprintf(stderr, "\n\tstack:\n\t\tsize: %d\n\t\tcards: ", p->stack.size);
-  if(p->stack.cards){
-    debug_cards(&p->stack);
-  }else{
-    fprintf(stderr, "no");
-  }
-  fprintf(stderr, "\n");
+  fprintf(stderr, "Player:\n\tid: %d\n\tscore: %d\n\tin: %s\n\tout: %s\n\t"
+      "stack:\n\t\tsize: %d\n\t\tcards: %s\n", p->id, p->score, (p->in) ?
+      "yes" : "no", (p->out) ? "yes" : "no", p->stack.size, (p->stack.cards) ?
+      "yes" : "no");
 }
 
+/******************************************************************************
+ * Print every stack.                                                         *
+ * -> void                                                                    *
+ * <- void                                                                    *
+ ******************************************************************************/
 static void debug_stacks(){
   int i;
   for(i = 0; i < NUM_STACKS; i++){
@@ -38,9 +40,15 @@ static void debug_stacks(){
   }
 }
 
+/******************************************************************************
+ * Print detailed informations about the game.                                *
+ * -> void                                                                    *
+ * <- void                                                                    *
+ ******************************************************************************/
 void debug(void){
   int i;
-  fprintf(stderr, "Game:\n\tplayers: %d\n\tstacks: %d\n\tcards: %d\n", num_players, NUM_STACKS, NUM_CARDS);
+  fprintf(stderr, "Game:\n\tplayers: %d\n\tstacks: %d\n\tcards: %d\n",
+      num_players, NUM_STACKS, NUM_CARDS);
   debug_stacks();
   for(i = 0; i < num_players; i++){
     debug_player(&players[i]);
