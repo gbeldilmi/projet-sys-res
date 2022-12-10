@@ -11,6 +11,9 @@ program="./run/lobby.sh"
 start_port=7767
 number_port=10
 
+# Build.
+./run/build.sh
+
 # The red button.
 close () {
   killall bash
