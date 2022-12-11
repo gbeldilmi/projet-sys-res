@@ -44,8 +44,6 @@ typedef struct player_s{
  ******************************************************************************/
 void deal_cards(void);
 void debug(void);
-void play_1(void *arg);
-void play_2(player_t *player);
 int play_bot_1(player_t *player);
 int play_bot_2(player_t *player);
 int play_human_1(player_t *player);
