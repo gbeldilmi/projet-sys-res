@@ -40,14 +40,14 @@ typedef struct player_s{
 }player_t;
 
 /******************************************************************************
- * Functions                                                                  *
+ * Function prototypes                                                        *
  ******************************************************************************/
 void deal_cards(void);
 void debug(void);
-int play_bot_1(player_t *player);
-int play_bot_2(player_t *player);
-int play_human_1(player_t *player);
-int play_human_2(player_t *player);
+int play_bot_1(player_t *);
+int play_bot_2(player_t *);
+int play_human_1(player_t *);
+int play_human_2(player_t *);
 void run(void);
 
 /******************************************************************************
