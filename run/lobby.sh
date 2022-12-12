@@ -10,7 +10,6 @@
 run_dir="/tmp"
 game_dir="$run_dir/game"
 program="./game/bin/game"
-pio="./gio/bin/gio"
 
 # Set everything up.
 init () {
