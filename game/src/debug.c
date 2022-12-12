@@ -31,7 +31,7 @@ static void debug_player(player_t *p){
  * -> void                                                                    *
  * <- void                                                                    *
  ******************************************************************************/
-static void debug_stacks(){
+static void debug_stacks(void){
   int i;
   for(i = 0; i < NUM_STACKS; i++){
     fprintf(stderr, "Stack %d:\n\tsize: %d\n\tcards: ", i, stacks[i].size);

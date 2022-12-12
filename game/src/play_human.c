@@ -73,7 +73,7 @@ static void print_state_1(player_t *player){
   fprintf(player->out, "\n");
   print_cards(player->out, player->stack.cards, player->stack.size, -1);
   for(i = 0; i < player->stack.size; i++){
-    fprintf(player->out, "-%c- ", 'A' + i);
+    fprintf(player->out, " -%c-  ", 'A' + i);
   }
   fprintf(player->out, "\n");
 }

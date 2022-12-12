@@ -46,16 +46,16 @@ static void get_order(int *order){
 
 /******************************************************************************
  * Play the first part of the turn for a player.                              *
- * -> void *arg :                                                             *
+ * -> void *p :                                                             *
  *      player who will play.                                                 *
  * <- void                                                                    *
  ******************************************************************************/
-static void play_1(void *arg){
+static void play_1(void *p){
   player_t *player;
   card_t card;
   int chosen;
   // Get the player.
-  player = (player_t *)arg;
+  player = (player_t *)p;
   // Get the card chosen by the player.
   chosen = (player->out) ? play_human_1(player) : play_bot_1(player);
   // Place the card chosen by the player at the end of the stack.
