@@ -18,7 +18,7 @@ O_FILES             := $(C_FILES:$(SOURCE_DIR)/%.c=$(BUILD_DIR)/%.o)
 # Options for code generation                                                  #
 #------------------------------------------------------------------------------#
 INCLUDES_FLAGS      := -I $(INCLUDE_DIR)/
-LIBRARIES_FLAGS     :=
+LIBRARIES_FLAGS     := -lpthread
 C_FLAGS             := -Wall -Werror -Wextra -O3
 LD_FLAGS            :=
 
