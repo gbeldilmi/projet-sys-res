@@ -19,8 +19,8 @@ O_FILES             := $(C_FILES:$(SOURCE_DIR)/%.c=$(BUILD_DIR)/%.o)
 #------------------------------------------------------------------------------#
 INCLUDES_FLAGS      := -I $(INCLUDE_DIR)/
 LIBRARIES_FLAGS     := -lpthread
-C_FLAGS             := -Wall -Werror -Wextra -O3
-LD_FLAGS            :=
+C_FLAGS             := -v -Wall -Werror -Wextra -O3
+LD_FLAGS            := -v
 
 #------------------------------------------------------------------------------#
 # Commands                                                                     #
@@ -36,6 +36,6 @@ re : clean all
 #------------------------------------------------------------------------------#
 $(BUILD_DIR)/%.o : $(SOURCE_DIR)/%.c
 	mkdir -pv $(dir $@)
-	gcc -v $(C_FLAGS) -c $< -o $@ $(INCLUDES_FLAGS)
+	gcc $(C_FLAGS) -c $< -o $@ $(INCLUDES_FLAGS)
 $(BUILD_DIR)/$(BINARY_FILE) : $(O_FILES)
-	gcc -v $(LD_FLAGS) $^ -o $@ $(LIBRARIES_FLAGS)
+	gcc $(LD_FLAGS) $^ -o $@ $(LIBRARIES_FLAGS)
