@@ -19,7 +19,7 @@ Créer un jeu du "6 qui prend" dans une version qui doit permettre, au minimum, 
 Nous avons choisi de diviser le projet en plusieurs parties :
 
 - un programme `game` qui va gérer le déroulement de la partie ;
-- une serie de scripts chargés de gérer la compilation, l'exécution ainsi que la gestion du programme `game` en local ou en réseau.
+- une série de scripts chargés de gérer la compilation, l'exécution ainsi que la gestion du programme `game` en local ou en réseau.
 
 ### Arborésence du projet
 
@@ -124,7 +124,7 @@ Le fichier `run.c` contient donc la fonction `run` qui va gérer le déroulement
 - `static void get_order(int *order)` : va définir l'ordre de jeu de la seconde phase à partir du choix des joueurs ;
 - `static void play_1(void *p)` : va demander au joueur passé en paramètre quelle carte il souhaite jouer et placer la carte choisie à la fin de la pile du joueur ;
 - `static void play_2(player_t *player)` : va demander au joueur passé en paramètre quelle pile il souhaite jouer et jouer la carte choisie sur la pile choisie ;
-- `static void podium(void)` : va afficher les resultats de la partie à chaque joueur.
+- `static void podium(void)` : va afficher les résultats de la partie à chaque joueur.
 
 #### `deal_cards.c`
 
@@ -177,7 +177,7 @@ Le script `server.sh` va tout d'abord faire appel au script `build.sh` pour comp
 
 ### Script `client.sh`
 
-Le script `client.sh` est assez simple. En lui passanr l'adresse du serveur auquel on souhaite se connecter, il va tenter de se connecter au serveur via `netcat` sur l'un des ports d'une plage de ports définie. En cas d'échec, il va demander à l'utilisateur si il souhaite se connecter sur un autre port jusqu'à avoir essayé tous les ports de la plage. Une fois connecté, l'utilisatur interagira directement avec le serveur via le script `lobby.sh`.
+Le script `client.sh` est assez simple. En lui passant l'adresse du serveur auquel on souhaite se connecter, il va tenter de se connecter au serveur via `netcat` sur l'un des ports d'une plage de ports définie. En cas d'échec, il va demander à l'utilisateur si ce dernier souhaite se connecter sur un autre port jusqu'à avoir essayé tous les ports de la plage. Une fois connecté, l'utilisateur interagira directement avec le serveur via le script `lobby.sh`.
 
 ### Script `lobby.sh`
 
@@ -185,7 +185,7 @@ Le script `lobby.sh`  est le script le plus complexe de ce projet. Il commence p
 
 #### Créer une partie
 
-Si l'utilisateur souhaite créer une partie, le script va demander à l'utilisateur de choisir le nom de la partie et le nombre de joueurs de chaque type qu'il souhaite. Si l'entrée de l'utilisateur est correcte, va créer un dossier du nom de la partie dans le dossier de fonctionnement du script pui va ensuite y créer trois fichiers par joueur humain : un fichier `.open` et deux pipes nommés `.in` et `.out` avec comme nom un identifiant de joueur. Le fichier `.open`, par sa présence, indique qu'aucun autre joueur ne s'est connecté à la partie avec l'identifiant spécifié et indique donc que la place est libre. Enfin, le script lance le programme `game` avec les paramètres définis par le client.
+Si l'utilisateur souhaite créer une partie, le script va demander à l'utilisateur de choisir le nom de la partie et le nombre de joueurs de chaque type qu'il souhaite. Si l'entrée de l'utilisateur est correcte, on va créer un dossier du nom de la partie dans le dossier de fonctionnement du script, nous allons ensuite y créer trois fichiers par joueur humain : un fichier `.open` et deux pipes nommés `.in` et `.out` avec comme nom un identifiant de joueur. Le fichier `.open`, par sa présence, indique qu'aucun autre joueur ne s'est connecté à la partie avec l'identifiant spécifié et indique donc que la place est libre. Enfin, le script lance le programme `game` avec les paramètres définis par le client.
 
 #### Rejoindre une partie
 
