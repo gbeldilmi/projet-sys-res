@@ -36,7 +36,7 @@ static void read_args(int argc, char **argv){
   }
   strcpy(game_dir, argv[1]);
   // Process the second and third arguments : numbes of human and bot players.
-  num_humans = 1/*atoi(argv[2])*/; // Todo : change it when fixed //////////////
+  num_humans = atoi(argv[2]);
   num_bots = atoi(argv[3]);
   num_players = num_humans + num_bots;
   // Check if the number of players is valid.
