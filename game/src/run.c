@@ -46,7 +46,7 @@ static void get_order(int *order){
 
 /******************************************************************************
  * Play the first part of the turn for a player.                              *
- * -> void *p :                                                             *
+ * -> void *p :                                                               *
  *      player who will play.                                                 *
  * <- void                                                                    *
  ******************************************************************************/
